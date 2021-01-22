@@ -2,7 +2,7 @@ export class LoggerService {
   private id: number | string;
 
   public constructor(correlationId?: number | string) {
-    this.id = (correlationId) ? correlationId : this.getDefaultCorrelationId();
+    this.id = correlationId ? correlationId : this.getDefaultCorrelationId();
   }
 
   private getDefaultCorrelationId() {

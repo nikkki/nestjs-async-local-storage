@@ -1,14 +1,19 @@
 import { Controller, Get, Inject } from '@nestjs/common';
-import { AsyncLocalStorage } from 'async_hooks';
 import { AppService } from './app.service';
+import { LOCAL_STORAGE } from './shared/injectionStrings';
+import { RequestLocalStorage } from './shared/types/async-local-storage.types';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService,
-    @Inject('LOCAL_STORAGE') private readonly requestContextStorage: AsyncLocalStorage<Map<any, any>>) { }
+  constructor(
+    private readonly appService: AppService,
+    @Inject(LOCAL_STORAGE) private readonly storage: RequestLocalStorage,
+  ) {}
 
   @Get()
   getHello(): string {
-    return this.appService.getHello();
+    const logger = this.storage.getStore().get('logger');
+
+    return this.appService.getHello({ logger });
   }
 }

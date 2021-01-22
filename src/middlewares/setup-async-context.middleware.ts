@@ -1,16 +1,19 @@
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { AsyncLocalStorage } from 'async_hooks';
+
+import { LOCAL_STORAGE } from 'src/shared/injectionStrings';
+import { RequestLocalStorage } from 'src/shared/types/async-local-storage.types';
 
 @Injectable()
 export class SetupAsyncContextMiddleware implements NestMiddleware {
-  constructor
-    (@Inject('LOCAL_STORAGE') private readonly requestContextStorage: AsyncLocalStorage<Map<any, any>>) {}
+  constructor(
+    @Inject(LOCAL_STORAGE) private readonly storage: RequestLocalStorage,
+  ) {}
 
   use(req: Request, res: Response, next: NextFunction) {
     const store = new Map();
-    this.requestContextStorage.run(store, () => {
+    this.storage.run(store, () => {
       next();
-    })
+    });
   }
 }
