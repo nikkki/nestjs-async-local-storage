@@ -51,7 +51,7 @@ result in console:
 1. Root app module accepts in `providers` new empty instance of AsyncLocalStorage(`app.module.ts`).
 2. On each request middleware `SetupAsyncContextMiddleware` sets new instance of store in our case it is `new Map()`;
 3. Then second middleware `LoggerMiddleware` sets new instance of logger into asyncLocalStorage with uniq correlationId, which will be provided in the each log.
-4. Finally,each controller has a dependency of instance of AsyncLocalStorage(from step 1) and in each call of controller's method we getting logger from storage and putting it in the Service method(`app.service.ts`).
+4. Finally, each controller(`app.controller.ts`) has a dependency of instance of AsyncLocalStorage(from step 1) and in each call of controller's method we getting logger from storage and putting it in the Service method(`app.service.ts`).
 
 ## Caveats
 1. Don't use `AsyncLocalStorage` as dependency in Services. It will be a leak of abstraction. Service can use only logger without knowledge of any "storages".
